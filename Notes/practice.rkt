@@ -1,6 +1,6 @@
 #lang racket
 
-; Recursion Exercises
+; Practice Exercises
 ; Exercise 1
 
 (define (sum-coins p n d q)

@@ -1,10 +1,9 @@
 #lang racket
 
 ; Notes for midterm 1
-;----------------------
+; -------------------
 ; Compound procedures:
 ; (define (<name> <formal parameters>) <body>)
-
 ; Nameless 'lambda' procedures can be used as an operator in a combination
 ((λ (x) (* x x )) 3)
 
