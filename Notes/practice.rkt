@@ -44,3 +44,15 @@
     (if (> x y)
     (if (> x z) x z)
     (if (> y z) y z)))
+
+; Embedded λ procedures
+(((λ (a) (λ (b) (* a b))) 4) 7)
+; 1. Rtk resolves the inner λ which resolves in a no name procedure that takes in a single argument
+(λ (b) (* a b))
+; 2. That procedure becomes the body for the outter λ expression which resolves to a new expression
+(λ (a) (λ (b) (* a b)))
+; Note that this procedure when given 'a' resolves to λ (b) procedure with 'a' satisfied
+; 3. This combination resolves to λ (b) with its 'a' parameter satisfied by 4
+((λ (a) (λ (b) (* a b))) 4)
+; 4. λ (b) now takes in 7 for its 'b' parameter and finishes resolving its body to 28
+(((λ (a) (λ (b) (* a b))) 4) 7)
