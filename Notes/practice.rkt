@@ -48,7 +48,7 @@
 ; Embedded λ procedures
 (((λ (a) (λ (b) (* a b))) 4) 7)
 ; 1. Rtk resolves the inner λ which resolves in a no name procedure that takes in a single argument
-(λ (b) (* a b))
+; (λ (b) (* a b))
 ; 2. That procedure becomes the body for the outter λ expression which resolves to a new expression
 (λ (a) (λ (b) (* a b)))
 ; Note that this procedure when given 'a' resolves to λ (b) procedure with 'a' satisfied
@@ -56,3 +56,45 @@
 ((λ (a) (λ (b) (* a b))) 4)
 ; 4. λ (b) now takes in 7 for its 'b' parameter and finishes resolving its body to 28
 (((λ (a) (λ (b) (* a b))) 4) 7)
+
+; Practice Midterm Question 5:
+; Define a recursive procedure named ​multiply-all​ that takes a list of numbers. 
+; This procedure returns the product of the numbers in the list, by means of a ​recursive process​.
+; > (multiply-all '(2 3 4))       ; returns 24
+; > (multiply-all '(3))           ; returns 3
+; > (multiply-all '())            ; returns 1
+
+(define (multiply-all lst)
+    (if (null? lst) 1
+        (* (multiply-all (cdr lst)) (car lst))))
+
+(multiply-all '(2 3 4))
+(multiply-all '(3))
+(multiply-all '())
+
+; Define a function factorial that uses build-list and multiply-all to resolve factorial of value n
+(define (factorial n)
+    (multiply-all (build-list n (λ (x) (+ x 1)))))
+
+(factorial 1)
+(factorial 3)
+(factorial 40)  ; Impressive how fast this can resolve
+
+; Practice Midterm Question 6:
+; Consider a function g : x → g(x). ​g​(​x)​ is the value of ​g​, evaluated at ​x​. The derivative of ​g​ is a
+; function, ​Dg​. ​Dg​(​x)​ is the value of the derivative of ​g,​ evaluated at ​x.​ For example, the derivative
+; of the function g : x → x3 is the function Dg : x → 3x2. The value of the derivative at 5, ​Dg(​ 5), 
+; is 75.Define a procedure named ​deriv​ that takes a procedure, ​g​, as an argument. ​deriv​ returns a 
+; procedure that takes one argument, ​x​. That procedure calculates and returns the derivative of ​g​, 
+; evaluated at ​x​. To approximate the derivative of g : x → x3 at 5, we evaluate:
+; > (define dx 0.00001)
+; > (define (cube x) (* x x x))
+; > ((deriv cube) 5)
+; 75.00014999664018
+
+(define (deriv f)
+    (λ (x) (/ (- (f (+ x dx)) (f x)) dx)))
+
+(define (cube x) (* x x x))
+(define dx 0.00001)
+((deriv cube) 5)
