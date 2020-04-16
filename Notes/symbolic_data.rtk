@@ -1,0 +1,30 @@
+; Symbolic Data
+; How do we write a list of symbols and not their associated values
+(define a 1)
+(define b 2)
+(list a b)      ; will resolve a and b '(1 2)
+(list 'a 'b)    ; use the ' prefix to make the list of symbol definitions '(a b)
+(car '(a b c))  ; we can define sets using the ' identifier
+
+; for numerical comparison we use =
+(= 2 2.0)       ; #t
+; for pointer (symbolic) comparison we use eq?
+; returns true if the symbols point to the same object in memory
+(eq? 'apples 'oranges) ; #f
+(eq? 'a 'a)     ; #t
+; eq? is not designed for numeric comparison
+(eq? 2 2.0)     ; #f since conversion is not the same
+; eq? does not check list equality
+(eq? '(1 2) '(1 2)) ; #f
+
+; eqv is similar except it checks if the values (integer results) are equal not the object ref similarity
+(eqv? (integer->char 955) (integer->char 955))  ; #t integer values equal
+(eq? (integer->char 955) (integer->char 955))   ; #f pointers not equal
+
+; equal? is functionally the same as eqv? except it can check list equality
+(equal? '(1 2) '(1 2)) ; #t
+
+; In summary:
+; 1. eq? >> to test for object equality
+; 2. eqv? or = >> for numeric equality
+; 3. equal? >> for a 'does it look the same' test
