@@ -1,5 +1,5 @@
+#!/usr/bin/racket
 #lang racket
-
 ; Practice Exercises
 ; Exercise 1
 

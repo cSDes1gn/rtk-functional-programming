@@ -1,3 +1,5 @@
+#!/usr/bin/racket
+#lang racket
 ; Symbolic Data
 ; How do we write a list of symbols and not their associated values
 (define a 1)

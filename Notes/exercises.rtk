@@ -1,0 +1,124 @@
+#!/usr/bin/racket
+#lang racket
+
+; Exercises from Ch 3
+(define cube 
+    (lambda (x) (* x x x)))
+
+(define compute-cost
+    (lambda (price tax)
+        (+ price (* price tax))))
+
+(compute-cost 13 0.05)
+
+; clean
+(define (xor a b)
+    (if a (not b) b))
+
+(define (absvalue x)
+    (cond [(< x 0) (- x)]
+          [else x]))
+
+(absvalue -40)
+(absvalue 2)
+
+(define (magnitude a b)
+    (if (< (absvalue a) (absvalue b))
+        b
+        a))
+
+(magnitude 8 -9)
+
+; Exercises from Ch 4
+(define fcompose
+    (lambda (f g) 
+        (lambda (x) (g (f x)))))
+
+(define inc
+    (lambda (x) (+ x 1)))
+
+(define square
+    (lambda (x) (* x x)))
+
+((fcompose square square) 3)
+
+; (fcompose (lambda (x) (∗ x 2)) (lambda (x) (/ x 2)))
+
+((fcompose (fcompose inc inc) inc) 2)
+
+(define (self-compose f)
+    (fcompose f f))
+
+(((fcompose self-compose self-compose) inc) 1)
+
+(define (fcompose3 f g h)
+    (lambda (x) (h (g (f x)))))
+
+(define (fcompose3alt f g h)
+    (fcompose (fcompose f g) h))
+
+(define f2compose
+    (lambda (f g) 
+    (lambda (x y) (g (f x y)))))
+
+((f2compose + abs) 3 -5)
+
+; Recursion
+(define (gauss-sum n)
+    (if (= n 1) 1
+        (+ n (gauss-sum (- n 1)))))
+
+(gauss-sum 100)
+
+(define (accumulate f)
+    (lambda (x) 
+        (if (= x 1)
+            1
+            (f x ((accumulate f) (- x 1))))))
+
+((accumulate +) 100)
+((accumulate *) 3)
+
+(define (bigger a b)
+    (if (> a b)
+        a
+        b))
+
+(define (find-maximum-epsilon f low high epsilon)
+    (if (>= low high)
+        (f low)
+        (bigger (f low) (find-maximum-epsilon f (+ low epsilon) high epsilon))))
+
+(define (find-maximum-input f low high)
+    (define (find-maximum-input-worker f low high best)
+        (if (= low high)
+            (if (> (f low) (f best))
+                low
+                best)
+                (find-maximum-input-worker f (+ low 1) high
+                    (if (> (f low) (f best))
+                        low
+                        best))))
+    (find-maximum-input-worker f low high low))
+
+; tail recursion (recursive expression cant contain another application expression)
+; this function provides all neccessary updates when it recures which means there are no hanging frames to return to
+(define (factorial n)
+    (define (helper n v)
+        (if (= n 1)
+            v
+            (helper (- n 1) (* n v))))
+    (helper n 1))
+
+(define (find-maximum f low high)
+    (define (find-maximum-helper f low high best)
+        (if (= low high)
+            (if (> (f best) (f high))
+                best
+                high)
+            (if (> (f low) (f best))
+                (find-maximum-helper f (+ low 1) high low)
+                (find-maximum-helper f (+ low 1) high best))))
+    (find-maximum-helper f low high low))
+
+(find-maximum (lambda (x) (* x (- 5.5 x))) 1 10)

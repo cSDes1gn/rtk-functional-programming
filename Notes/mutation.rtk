@@ -1,3 +1,5 @@
+#!/usr/bin/racket
+#lang racket
 ; Mutation in LISP
 ; mutation is discouraged in functional programming
 ; the set! form associates a new value to a predefined name
