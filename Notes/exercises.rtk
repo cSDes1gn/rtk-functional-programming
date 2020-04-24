@@ -1,4 +1,3 @@
-#!/usr/bin/racket
 #lang racket
 
 ; Exercises from Ch 3
@@ -122,3 +121,72 @@
     (find-maximum-helper f low high low))
 
 (find-maximum (lambda (x) (* x (- 5.5 x))) 1 10)
+
+; Exercise set 5
+
+(define tpair
+    (cons (cons (cons 1 2) (cons 3 4) 5)))
+
+(define sample 
+    (cons (1 (cons (cons(2 3) cons(4 cons(5 6)))))))
+
+(list? (cdr (cons 1 (cons 2 (cons null null)))))
+
+(define (is-list? l)
+    (if (null? l)
+        #t
+        (if (pair? l)
+            (is-list? (cdr l))
+            #f)))
+
+; must iterate through list twice via recursive definitions which is inefficient and memory
+; intensive
+(define (list-max li)
+    (if null? li)
+        0
+        (if (> (list-max (cdr li)) (car li))
+            (list-max (cdr li))
+            (car li)))
+
+(define (list-last-element li)
+    (if (null? li)
+        (error "input list cannot be empty")
+        (if null? (cdr li)
+            (car li)
+            (list-last-element (cdr li)))))
+
+(define (list-ordered? fn li)
+    (if (null? li)
+        #t
+        (if (null? (cdr li))
+            #t
+            (if (fn (car li) (car (cdr li)))
+                (list-ordered? fn (cdr li))
+                #f))))
+
+(define (list-increment li)
+    (if (null? li)
+        null
+        (cons (+ (car li) 1) (list-increment (cdr li)))))
+
+(define (list-filter-even li)
+    (if (null? li)
+        null
+        (if (even? (car li))
+            (cons (car li) (list-filter-even (cdr li))
+            (list-filter-even (cdr li))))))
+
+; Very hard problem
+(define (list-contains? elem li)
+    (if (null? li)
+        #f
+        (if (equal? elem (car li))
+            #t
+            (list-contains? elem (cdr li)))))
+
+(define (list-unique-elements li)
+    (if (null? li)
+        null
+        (if (list-contains? (car li) (cdr li))
+            (list-unique-elements (list-filter (lambda (elem) (not (equal? elem (car li))) li)))
+            (cons (car li) (list-unique-elements (cdr li))))))
