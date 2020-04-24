@@ -3,7 +3,7 @@
 ; Mutation in LISP
 ; mutation is discouraged in functional programming
 ; the set! form associates a new value to a predefined name
-(set! name new)     ; where new is an expr
+;(set! name new)      where new is an expr
 ; notably in substitution model set! is not used since expr will remain the same everywhere in code
 ; with mutation a definition can change so the evaluation of an expression can be different in different code spots
 ; functional vs imperative paradigm
@@ -16,8 +16,8 @@
 ; This version creates a local variable counter ofr counting up which allows for multiple counters to exist
 (define (new-count-up)        ; there are () around new-count-up since we are defining an expression
     (let ([counter 0]) 
-        (λ () (set! counter (+ counter 1) counter))) ; when let returns it returns this expr created by λ which is bound to new-count-up
-)                                                    ; this saves the counter value within the expression
+        (λ () (set! counter (+ counter 1)) counter))) ; when let returns it returns this expr created by λ which is bound to new-count-up
+                                                   ; this saves the counter value within the expression
 (define count1 (new-count-up))
 (define count2 (new-count-up))
 (count1)        ; 1
@@ -27,7 +27,7 @@
 
 ; no let required since the value is specified by the user and stored in the returned expr
 (define (upcounter counter)
-    (λ() (set! counter (+counter 1)) counter))
+    (λ () (set! counter (+ counter 1)) counter))
 
 ; begin defines a set of expressions evaluated in sequence but outputs the value of only the final expression
 
@@ -40,15 +40,15 @@
     )
     (define (dispatch cmd)
         (cond
-            ([eq? cmd ‘inc] count-up)
-            ([eq? cmd ‘dec] count-down)
+            ([eq? cmd 'inc] count-up)
+            ([eq? cmd 'dec] count-down)
         (else (error "Unknown command:" cmd)))
     )
     dispatch
 )
 ; count1 is bound to dispatch
-(define count1 (make-counter 0))
-(count1 'inc)       ; 1
+(define count10 (make-counter 0))
+(count10 'inc)       ; 1
 
 ;; Begin usage:
 ;; In this procedure, all the expresions are enclosed in a begin special form.
@@ -126,3 +126,14 @@
               y)))
 
 (proc5 1 1)
+
+(define (count-up)
+  (let ([counter 0])
+        (set! counter (+ counter 1))
+        counter))
+(define (new-count-up)
+  (let ([counter 0])
+      (lambda () (set! counter (+ counter 1))
+      counter)))
+(define x (new-count-up))
+(define y (new-count-up))

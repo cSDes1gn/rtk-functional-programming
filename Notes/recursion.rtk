@@ -22,3 +22,22 @@
                 ((= kinds-of-coins 5) 50)))
 
 (count-change 100)
+
+; build list procedure
+(define (build-lister n f)
+    ; build-up creates a list by applying procedure f to the integers
+    ; from m to n-1, m < n, in order. The first list element is the
+    ; value produced by (f m), and the last list element is the value
+    ; produced by (f (- n 1)).
+    (define (build-up m)
+        (if (= m n)
+            '()
+            (cons (f m) (build-up (+ m 1)))))
+    (build-up 0))
+(build-lister 11 (lambda (x) (* x x)))
+
+; Recursive multiply all numbers in list
+(define (multiply-all nums)
+    (if (empty? nums)
+        1
+        (* (car nums) (multiply-all (cdr nums)))))
