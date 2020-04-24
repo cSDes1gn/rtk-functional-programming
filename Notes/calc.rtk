@@ -26,7 +26,7 @@
 ; Apply a function to arguments:
 
 (define (calc-apply fn args)
-    (display cons(fn args))
+    (display (cons fn args))
     (newline)
     (cond ((eq? fn '+) (foldr + 0 args))
             ((eq? fn '-) (cond ((null? args) (error "Calc: no args to -"))
